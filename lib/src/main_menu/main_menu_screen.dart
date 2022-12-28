@@ -1,17 +1,13 @@
-// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../audio/audio_controller.dart';
-import '../audio/sounds.dart';
-import '../games_services/games_services.dart';
-import '../settings/settings.dart';
-import '../style/palette.dart';
-import '../style/responsive_screen.dart';
+import 'package:game1/src/audio/sounds.dart';
+import 'package:game1/src/games_services/games_services.dart';
+import 'package:game1/src/settings/settings.dart';
+import 'package:game1/src/style/delayed_appear.dart';
+import 'package:game1/src/style/palette.dart';
+import 'package:game1/src/style/responsive_screen.dart';
+import 'package:game1/src/style/rough/button.dart';
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
@@ -21,75 +17,85 @@ class MainMenuScreen extends StatelessWidget {
     final palette = context.watch<Palette>();
     final gamesServicesController = context.watch<GamesServicesController?>();
     final settingsController = context.watch<SettingsController>();
-    final audioController = context.watch<AudioController>();
 
     return Scaffold(
-      backgroundColor: palette.backgroundMain,
+      backgroundColor: palette.redPen,
       body: ResponsiveScreen(
         mainAreaProminence: 0.45,
-        squarishMainArea: Center(
-          child: Transform.rotate(
-            angle: -0.1,
-            child: const Text(
-              'Game 1!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Permanent Marker',
-                fontSize: 55,
-                height: 1,
+        squarishMainArea: DelayedAppear(
+          ms: 1000,
+          child: Center(
+            child: Transform.scale(
+              scale: 1.2,
+              child: Image.asset(
+                'assets/images/main-menu.png',
+                fit: BoxFit.cover,
               ),
             ),
           ),
         ),
         rectangularMenuArea: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                audioController.playSfx(SfxType.buttonTap);
-                GoRouter.of(context).go('/play');
-              },
-              child: const Text('Play'),
+            DelayedAppear(
+              ms: 800,
+              child: RoughButton(
+                onTap: () {
+                  GoRouter.of(context).go('/play');
+                },
+                drawRectangle: true,
+                textColor: palette.redPen,
+                fontSize: 42,
+                soundEffect: SfxType.erase,
+                child: const Text('Play'),
+              ),
             ),
-            _gap,
             if (gamesServicesController != null) ...[
               _hideUntilReady(
                 ready: gamesServicesController.signedIn,
-                child: ElevatedButton(
-                  onPressed: () => gamesServicesController.showAchievements(),
-                  child: const Text('Achievements'),
+                // TODO: show an "active" animation on the button
+                child: DelayedAppear(
+                  ms: 600,
+                  child: RoughButton(
+                    onTap: () => gamesServicesController.showAchievements(),
+                    child: const Text('Achievements'),
+                  ),
                 ),
               ),
-              _gap,
               _hideUntilReady(
+                // TODO: show an "active" animation on the button
                 ready: gamesServicesController.signedIn,
-                child: ElevatedButton(
-                  onPressed: () => gamesServicesController.showLeaderboard(),
-                  child: const Text('Leaderboard'),
+                child: DelayedAppear(
+                  ms: 400,
+                  child: RoughButton(
+                    onTap: () => gamesServicesController.showLeaderboard(),
+                    child: const Text('Leaderboard'),
+                  ),
                 ),
               ),
-              _gap,
             ],
-            ElevatedButton(
-              onPressed: () => GoRouter.of(context).push('/settings'),
-              child: const Text('Settings'),
+            DelayedAppear(
+              ms: 200,
+              child: RoughButton(
+                onTap: () => GoRouter.of(context).go('/settings'),
+                child: const Text('Settings'),
+              ),
             ),
-            _gap,
             Padding(
-              padding: const EdgeInsets.only(top: 32),
+              padding: const EdgeInsets.only(top: 10),
               child: ValueListenableBuilder<bool>(
                 valueListenable: settingsController.muted,
                 builder: (context, muted, child) {
                   return IconButton(
                     onPressed: () => settingsController.toggleMuted(),
-                    icon: Icon(muted ? Icons.volume_off : Icons.volume_up),
+                    icon: Icon(
+                      muted ? Icons.volume_off : Icons.volume_up,
+                      color: palette.trueWhite,
+                    ),
                   );
                 },
               ),
             ),
-            _gap,
-            const Text('Music by Mr Smith'),
-            _gap,
           ],
         ),
       ),
@@ -106,18 +112,12 @@ class MainMenuScreen extends StatelessWidget {
     return FutureBuilder<bool>(
       future: ready,
       builder: (context, snapshot) {
-        // Use Visibility here so that we have the space for the buttons
-        // ready.
-        return Visibility(
-          visible: snapshot.data ?? false,
-          maintainState: true,
-          maintainSize: true,
-          maintainAnimation: true,
+        return AnimatedOpacity(
+          duration: const Duration(milliseconds: 700),
+          opacity: snapshot.hasData ? 1 : 0,
           child: child,
         );
       },
     );
   }
-
-  static const _gap = SizedBox(height: 10);
 }
