@@ -1,17 +1,13 @@
-// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../ads/ads_controller.dart';
-import '../ads/banner_ad_widget.dart';
-import '../games_services/score.dart';
-import '../in_app_purchase/in_app_purchase.dart';
-import '../style/palette.dart';
-import '../style/responsive_screen.dart';
+import 'package:game1/src/ads/ads_controller.dart';
+import 'package:game1/src/ads/banner_ad_widget.dart';
+import 'package:game1/src/games_services/score.dart';
+import 'package:game1/src/in_app_purchase/in_app_purchase.dart';
+import 'package:game1/src/style/palette.dart';
+import 'package:game1/src/style/responsive_screen.dart';
+import 'package:game1/src/style/rough/button.dart';
 
 class WinGameScreen extends StatelessWidget {
   final Score score;
@@ -61,10 +57,11 @@ class WinGameScreen extends StatelessWidget {
             ),
           ],
         ),
-        rectangularMenuArea: ElevatedButton(
-          onPressed: () {
-            GoRouter.of(context).go('/play');
+        rectangularMenuArea: RoughButton(
+          onTap: () {
+            GoRouter.of(context).pop();
           },
+          textColor: palette.ink,
           child: const Text('Continue'),
         ),
       ),

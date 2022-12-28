@@ -1,7 +1,3 @@
-// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'dart:async';
 import 'dart:isolate';
 
@@ -40,15 +36,14 @@ Future<void> guardWithCrashlytics(
       crashlytics?.log(message);
 
       if (record.level >= Level.SEVERE) {
-        crashlytics?.recordError(message, filterStackTrace(StackTrace.current),
-            fatal: true);
+        crashlytics?.recordError(message, filterStackTrace(StackTrace.current));
       }
     });
 
     // Pass all uncaught errors from the framework to Crashlytics.
     if (crashlytics != null) {
       WidgetsFlutterBinding.ensureInitialized();
-      FlutterError.onError = crashlytics.recordFlutterFatalError;
+      FlutterError.onError = crashlytics.recordFlutterError;
     }
 
     if (!kIsWeb) {
@@ -57,8 +52,9 @@ Future<void> guardWithCrashlytics(
       Isolate.current.addErrorListener(RawReceivePort((dynamic pair) async {
         final errorAndStacktrace = pair as List<dynamic>;
         await crashlytics?.recordError(
-            errorAndStacktrace.first, errorAndStacktrace.last as StackTrace?,
-            fatal: true);
+          errorAndStacktrace.first,
+          errorAndStacktrace.last as StackTrace?,
+        );
       }).sendPort);
     }
 
@@ -68,7 +64,7 @@ Future<void> guardWithCrashlytics(
     // This sees all errors that occur in the runZonedGuarded zone.
     debugPrint('ERROR: $error\n\n'
         'STACK:$stack');
-    crashlytics?.recordError(error, stack, fatal: true);
+    crashlytics?.recordError(error, stack);
   });
 }
 
