@@ -1,16 +1,16 @@
-// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'settings.dart';
+import 'package:game1/src/settings/settings.dart';
 
 void showCustomNameDialog(BuildContext context) {
   showGeneralDialog(
       context: context,
-      pageBuilder: (context, animation, secondaryAnimation) =>
+      pageBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) =>
           CustomNameDialog(animation: animation));
 }
 
@@ -33,6 +33,7 @@ class _CustomNameDialogState extends State<CustomNameDialog> {
         parent: widget.animation,
         curve: Curves.easeOutCubic,
       ),
+      // TODO: make this nicer
       child: SimpleDialog(
         title: const Text('Change name'),
         children: [

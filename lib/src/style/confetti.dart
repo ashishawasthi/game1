@@ -20,6 +20,7 @@ import 'package:flutter/widgets.dart';
 class Confetti extends StatefulWidget {
   static const _defaultColors = [
     Color(0xffd10841),
+    Color(0xffd10841),
     Color(0xff1d75fb),
     Color(0xff0050bc),
     Color(0xffa2dcc7),
@@ -160,13 +161,13 @@ class _PaperSnipping {
 
   double cosA = 1.0;
 
-  final double size = 7.0;
+  final double size = 7 + _random.nextDouble() * 10;
 
   final double oscillationSpeed = 0.5 + _random.nextDouble() * 1.5;
 
   final double xSpeed = 40;
 
-  final double ySpeed = 50 + _random.nextDouble() * 60;
+  final double ySpeed = 100 + _random.nextDouble() * 60;
 
   late List<_Vector> corners = List.generate(4, (i) {
     final angle = this.angle + degToRad * (45 + i * 90);

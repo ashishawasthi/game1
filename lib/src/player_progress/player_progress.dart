@@ -10,27 +10,22 @@ import 'persistence/player_progress_persistence.dart';
 
 /// Encapsulates the player's progress.
 class PlayerProgress extends ChangeNotifier {
-  static const maxHighestScoresPerPlayer = 10;
-
   final PlayerProgressPersistence _store;
 
   int _highestLevelReached = 0;
 
-  /// Creates an instance of [PlayerProgress] backed by an injected
-  /// persistence [store].
-  PlayerProgress(PlayerProgressPersistence store) : _store = store;
+  PlayerProgress(this._store);
 
   /// The highest level that the player has reached so far.
   int get highestLevelReached => _highestLevelReached;
 
-  /// Fetches the latest data from the backing persistence store.
-  Future<void> getLatestFromStore() async {
+  void getLatestFromStore() async {
     final level = await _store.getHighestLevelReached();
     if (level > _highestLevelReached) {
       _highestLevelReached = level;
       notifyListeners();
     } else if (level < _highestLevelReached) {
-      await _store.saveHighestLevelReached(_highestLevelReached);
+      _store.saveHighestLevelReached(_highestLevelReached);
     }
   }
 
@@ -41,6 +36,8 @@ class PlayerProgress extends ChangeNotifier {
     notifyListeners();
     _store.saveHighestLevelReached(_highestLevelReached);
   }
+
+  static const maxHighestScoresPerPlayer = 10;
 
   /// Registers [level] as reached.
   ///
