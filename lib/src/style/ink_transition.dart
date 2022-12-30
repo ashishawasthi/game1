@@ -1,3 +1,7 @@
+// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
@@ -14,8 +18,7 @@ CustomTransitionPage<T> buildTransition<T>({
 }) {
   return CustomTransitionPage<T>(
     child: child,
-    transitionsBuilder: (BuildContext context, Animation<double> animation,
-        Animation<double> secondaryAnimation, Widget child) {
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return _InkReveal(
         animation: animation,
         color: color,
@@ -45,8 +48,7 @@ class _InkReveal extends StatefulWidget {
     required this.animation,
     required this.color,
     this.flipHorizontally = false,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   State<_InkReveal> createState() => _InkRevealState();
@@ -56,6 +58,8 @@ class _InkRevealState extends State<_InkReveal> {
   static final _log = Logger('_InkRevealState');
 
   bool _finished = false;
+
+  final _tween = Tween(begin: const Offset(0, -1), end: Offset.zero);
 
   @override
   void initState() {

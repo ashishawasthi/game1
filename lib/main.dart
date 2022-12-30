@@ -5,6 +5,8 @@
 // Uncomment the following lines when enabling Firebase Crashlytics
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,6 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'firebase_options.dart';
 
 import 'src/ads/ads_controller.dart';
 import 'src/app_lifecycle/app_lifecycle.dart';
@@ -124,7 +125,7 @@ class MyApp extends StatelessWidget {
           routes: [
             GoRoute(
                 path: 'play',
-                pageBuilder: (context, state) => buildTransition(
+                pageBuilder: (context, state) => buildTransition<void>(
                       child: const LevelSelectionScreen(
                           key: Key('level selection')),
                       color: context.watch<Palette>().backgroundLevelSelection,
@@ -136,7 +137,7 @@ class MyApp extends StatelessWidget {
                       final levelNumber = int.parse(state.params['level']!);
                       final level = gameLevels
                           .singleWhere((e) => e.number == levelNumber);
-                      return buildTransition(
+                      return buildTransition<void>(
                         child: PlaySessionScreen(
                           level,
                           key: const Key('play session'),
@@ -152,7 +153,7 @@ class MyApp extends StatelessWidget {
                       final map = state.extra! as Map<String, dynamic>;
                       final score = map['score'] as Score;
 
-                      return buildTransition(
+                      return buildTransition<void>(
                         child: WinGameScreen(
                           score: score,
                           key: const Key('win game'),
@@ -249,6 +250,7 @@ class MyApp extends StatelessWidget {
                 ),
               ),
             ),
+            routeInformationProvider: _router.routeInformationProvider,
             routeInformationParser: _router.routeInformationParser,
             routerDelegate: _router.routerDelegate,
             scaffoldMessengerKey: scaffoldMessengerKey,

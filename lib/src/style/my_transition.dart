@@ -49,7 +49,7 @@ class _MyReveal extends StatefulWidget {
 }
 
 class _MyRevealState extends State<_MyReveal> {
-  static final _log = Logger('_InkRevealState');
+  static final _log = Logger('_MyRevealState');
 
   bool _finished = false;
 
