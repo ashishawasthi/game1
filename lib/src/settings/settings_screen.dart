@@ -10,6 +10,7 @@ import '../in_app_purchase/in_app_purchase.dart';
 import '../player_progress/player_progress.dart';
 import '../style/palette.dart';
 import '../style/responsive_screen.dart';
+import '../style/rough/button.dart';
 import 'custom_name_dialog.dart';
 import 'settings.dart';
 
@@ -92,19 +93,25 @@ class SettingsScreen extends StatelessWidget {
                 context.read<PlayerProgress>().reset();
 
                 final messenger = ScaffoldMessenger.of(context);
+                messenger.clearSnackBars();
                 messenger.showSnackBar(
                   const SnackBar(
                       content: Text('Player progress has been reset.')),
                 );
               },
             ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+              child: Text('Music by Mr Smith, used with permission.'),
+            ),
             _gap,
           ],
         ),
-        rectangularMenuArea: ElevatedButton(
-          onPressed: () {
+        rectangularMenuArea: RoughButton(
+          onTap: () {
             GoRouter.of(context).pop();
           },
+          textColor: palette.ink,
           child: const Text('Back'),
         ),
       ),

@@ -12,6 +12,7 @@ import '../games_services/score.dart';
 import '../in_app_purchase/in_app_purchase.dart';
 import '../style/palette.dart';
 import '../style/responsive_screen.dart';
+import '../style/rough/button.dart';
 
 class WinGameScreen extends StatelessWidget {
   final Score score;
@@ -61,10 +62,11 @@ class WinGameScreen extends StatelessWidget {
             ),
           ],
         ),
-        rectangularMenuArea: ElevatedButton(
-          onPressed: () {
-            GoRouter.of(context).go('/play');
+        rectangularMenuArea: RoughButton(
+          onTap: () {
+            GoRouter.of(context).pop();
           },
+          textColor: palette.ink,
           child: const Text('Continue'),
         ),
       ),

@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:flutter/foundation.dart';
+import '../game_internals/board_setting.dart';
 
 /// Encapsulates a score and the arithmetic to compute it.
 @immutable
@@ -13,11 +14,13 @@ class Score {
 
   final int level;
 
-  factory Score(int level, int difficulty, Duration duration) {
+  factory Score(int level, BoardSetting setting, int difficulty, Duration duration) {
     // The higher the difficulty, the higher the score.
-    var score = difficulty;
+    var score = difficulty * difficulty;
+    // The higher the number of tiles in a row needed to win, the higher the score.
+    score *= setting.k * setting.k;
     // The lower the time to beat the level, the higher the score.
-    score *= 10000 ~/ (duration.inSeconds.abs() + 1);
+    score *= 1000 ~/ (duration.inSeconds.abs() + 1);
     return Score._(score, duration, level);
   }
 
