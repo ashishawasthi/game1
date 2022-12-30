@@ -46,7 +46,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Other Generated Files, that changed after build on switching branches
+# Generated Files, that changed after build on switching branches
 macos/Flutter/GeneratedPluginRegistrant.swift
 windows/flutter/generated_plugin_registrant.cc
 pubspec.lock
