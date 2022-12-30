@@ -1,3 +1,7 @@
+// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
 import 'dart:async';
 import 'dart:io';
 
@@ -39,19 +43,19 @@ class PreloadedBannerAd {
       size: size,
       request: _adRequest,
       listener: BannerAdListener(
-        onAdLoaded: (Ad ad) {
+        onAdLoaded: (ad) {
           _log.info(() => 'Ad loaded: ${_bannerAd.hashCode}');
           _adCompleter.complete(_bannerAd);
         },
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        onAdFailedToLoad: (ad, error) {
           _log.warning('Banner failedToLoad: $error');
           _adCompleter.completeError(error);
           ad.dispose();
         },
-        onAdImpression: (Ad ad) {
+        onAdImpression: (ad) {
           _log.info('Ad impression registered');
         },
-        onAdClicked: (Ad ad) {
+        onAdClicked: (ad) {
           _log.info('Ad click registered');
         },
       ),

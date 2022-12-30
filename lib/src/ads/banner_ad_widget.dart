@@ -1,11 +1,17 @@
+// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-import 'package:game1/src/ads/ads_controller.dart';
-import 'package:game1/src/ads/preloaded_banner_ad.dart';
+
+import 'ads_controller.dart';
+import 'preloaded_banner_ad.dart';
 
 /// Displays a banner ad that conforms to the widget's size in the layout,
 /// and reloads the ad when the user changes orientation.
@@ -34,8 +40,10 @@ class BannerAdWidget extends StatefulWidget {
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   static final _log = Logger('BannerAdWidget');
 
+  static const useAnchoredAdaptiveSize = false;
   BannerAd? _bannerAd;
   _LoadingState _adLoadingState = _LoadingState.initial;
+
   late Orientation _currentOrientation;
 
   @override
@@ -65,38 +73,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    final adsController = context.read<AdsController>();
-    final ad = adsController.takePreloadedAd();
-    if (ad != null) {
-      _log.info("A preloaded banner was supplied. Using it.");
-      _showPreloadedAd(ad);
-    } else {
-      _loadAd();
-    }
-  }
-
-  void _showPreloadedAd(PreloadedBannerAd ad) async {
-    // It's possible that the banner is still loading (even though it started
-    // preloading at the start of the previous screen).
-    _adLoadingState = _LoadingState.loading;
-    try {
-      _bannerAd = await ad.ready;
-    } on LoadAdError catch (error) {
-      _log.severe('Error when loading preloaded banner: $error');
-      _loadAd();
-      return;
-    }
-    if (!mounted) return;
-
-    setState(() {
-      _adLoadingState = _LoadingState.loaded;
-    });
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _currentOrientation = MediaQuery.of(context).orientation;
@@ -109,7 +85,19 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     super.dispose();
   }
 
-  static const useAnchoredAdaptiveSize = false;
+  @override
+  void initState() {
+    super.initState();
+
+    final adsController = context.read<AdsController>();
+    final ad = adsController.takePreloadedAd();
+    if (ad != null) {
+      _log.info("A preloaded banner was supplied. Using it.");
+      _showPreloadedAd(ad);
+    } else {
+      _loadAd();
+    }
+  }
 
   /// Load (another) ad, disposing of the current ad if there is one.
   Future<void> _loadAd() async {
@@ -124,6 +112,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     await _bannerAd?.dispose();
     _log.fine('_bannerAd disposed');
     if (!mounted) return;
+
     setState(() {
       _bannerAd = null;
       _adLoadingState = _LoadingState.loading;
@@ -161,7 +150,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       size: size,
       request: const AdRequest(),
       listener: BannerAdListener(
-        onAdLoaded: (Ad ad) {
+        onAdLoaded: (ad) {
           _log.info(() => 'Ad loaded: ${ad.responseInfo}');
           setState(() {
             // When the ad is loaded, get the ad size and use it to set
@@ -170,19 +159,37 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
             _adLoadingState = _LoadingState.loaded;
           });
         },
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        onAdFailedToLoad: (ad, error) {
           _log.warning('Banner failedToLoad: $error');
           ad.dispose();
         },
-        onAdImpression: (Ad ad) {
+        onAdImpression: (ad) {
           _log.info('Ad impression registered');
         },
-        onAdClicked: (Ad ad) {
+        onAdClicked: (ad) {
           _log.info('Ad click registered');
         },
       ),
     );
     return _bannerAd!.load();
+  }
+
+  Future<void> _showPreloadedAd(PreloadedBannerAd ad) async {
+    // It's possible that the banner is still loading (even though it started
+    // preloading at the start of the previous screen).
+    _adLoadingState = _LoadingState.loading;
+    try {
+      _bannerAd = await ad.ready;
+    } on LoadAdError catch (error) {
+      _log.severe('Error when loading preloaded banner: $error');
+      unawaited(_loadAd());
+      return;
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _adLoadingState = _LoadingState.loaded;
+    });
   }
 }
 

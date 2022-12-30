@@ -1,13 +1,19 @@
+// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:game1/src/audio/sounds.dart';
-import 'package:game1/src/games_services/games_services.dart';
-import 'package:game1/src/settings/settings.dart';
-import 'package:game1/src/style/delayed_appear.dart';
-import 'package:game1/src/style/palette.dart';
-import 'package:game1/src/style/responsive_screen.dart';
-import 'package:game1/src/style/rough/button.dart';
+
+//import '../audio/audio_controller.dart';
+import '../audio/sounds.dart';
+import '../games_services/games_services.dart';
+import '../settings/settings.dart';
+import '../style/palette.dart';
+import '../style/responsive_screen.dart';
+import '../style/rough/button.dart';
+import '../style/delayed_appear.dart';
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
@@ -96,6 +102,9 @@ class MainMenuScreen extends StatelessWidget {
                 },
               ),
             ),
+            _gap,
+            const Text('Music by Mr Smith'),
+            _gap,
           ],
         ),
       ),
@@ -120,4 +129,6 @@ class MainMenuScreen extends StatelessWidget {
       },
     );
   }
+
+  static const _gap = SizedBox(height: 10);
 }

@@ -1,12 +1,19 @@
+// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:game1/src/audio/sounds.dart';
-import 'package:game1/src/player_progress/player_progress.dart';
-import 'package:game1/src/style/delayed_appear.dart';
-import 'package:game1/src/style/palette.dart';
-import 'package:game1/src/style/responsive_screen.dart';
-import 'package:game1/src/style/rough/button.dart';
+
+//import '../audio/audio_controller.dart';
+import '../audio/sounds.dart';
+import '../player_progress/player_progress.dart';
+import '../style/palette.dart';
+import '../style/responsive_screen.dart';
+//import 'levels.dart';
+import '../style/rough/button.dart';
+import '../style/delayed_appear.dart';
 
 class LevelSelectionScreen extends StatelessWidget {
   const LevelSelectionScreen({super.key});

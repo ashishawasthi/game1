@@ -1,13 +1,18 @@
+// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:game1/src/in_app_purchase/in_app_purchase.dart';
-import 'package:game1/src/player_progress/player_progress.dart';
-import 'package:game1/src/settings/custom_name_dialog.dart';
-import 'package:game1/src/settings/settings.dart';
-import 'package:game1/src/style/palette.dart';
-import 'package:game1/src/style/responsive_screen.dart';
-import 'package:game1/src/style/rough/button.dart';
+
+import '../in_app_purchase/in_app_purchase.dart';
+import '../player_progress/player_progress.dart';
+import '../style/palette.dart';
+import '../style/responsive_screen.dart';
+import '../style/rough/button.dart';
+import 'custom_name_dialog.dart';
+import 'settings.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -57,7 +62,9 @@ class SettingsScreen extends StatelessWidget {
             Consumer<InAppPurchaseController?>(
                 builder: (context, inAppPurchase, child) {
               if (inAppPurchase == null) {
-                // In-app purchases are not supported.
+                // In-app purchases are not supported yet.
+                // Go to lib/main.dart and uncomment the lines that create
+                // the InAppPurchaseController.
                 return const SizedBox.shrink();
               }
 
@@ -115,7 +122,7 @@ class SettingsScreen extends StatelessWidget {
 class _NameChangeLine extends StatelessWidget {
   final String title;
 
-  const _NameChangeLine(this.title, {Key? key}) : super(key: key);
+  const _NameChangeLine(this.title);
 
   @override
   Widget build(BuildContext context) {
@@ -159,8 +166,7 @@ class _SettingsLine extends StatelessWidget {
 
   final VoidCallback? onSelected;
 
-  const _SettingsLine(this.title, this.icon, {this.onSelected, Key? key})
-      : super(key: key);
+  const _SettingsLine(this.title, this.icon, {this.onSelected});
 
   @override
   Widget build(BuildContext context) {

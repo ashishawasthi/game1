@@ -1,3 +1,7 @@
+// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
 import 'dart:async';
 
 import 'package:flutter/gestures.dart';
@@ -5,24 +9,24 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart' hide Level;
 import 'package:provider/provider.dart';
-import 'package:game1/src/ads/ads_controller.dart';
-import 'package:game1/src/ai/ai_opponent.dart';
-import 'package:game1/src/audio/audio_controller.dart';
-import 'package:game1/src/audio/sounds.dart';
-import 'package:game1/src/game_internals/board_state.dart';
-import 'package:game1/src/games_services/games_services.dart';
-import 'package:game1/src/games_services/score.dart';
-import 'package:game1/src/in_app_purchase/in_app_purchase.dart';
-import 'package:game1/src/level_selection/levels.dart';
-import 'package:game1/src/play_session/game_board.dart';
-import 'package:game1/src/play_session/hint_snackbar.dart';
-import 'package:game1/src/player_progress/player_progress.dart';
-import 'package:game1/src/settings/custom_name_dialog.dart';
-import 'package:game1/src/settings/settings.dart';
-import 'package:game1/src/style/delayed_appear.dart';
-import 'package:game1/src/style/palette.dart';
 
+import '../ads/ads_controller.dart';
+import '../ai/ai_opponent.dart';
+import '../audio/audio_controller.dart';
+import '../audio/sounds.dart';
+import '../game_internals/board_state.dart';
+import '../games_services/games_services.dart';
+import '../games_services/score.dart';
+import '../in_app_purchase/in_app_purchase.dart';
+import '../level_selection/levels.dart';
+import '../player_progress/player_progress.dart';
+import '../play_session/game_board.dart';
+import '../play_session/hint_snackbar.dart';
+import '../settings/custom_name_dialog.dart';
+import '../settings/settings.dart';
+import '../style/delayed_appear.dart';
 import '../style/confetti.dart';
+import '../style/palette.dart';
 
 class PlaySessionScreen extends StatefulWidget {
   final GameLevel level;
@@ -113,7 +117,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
                         onDelayFinished: () {
                           final audioController =
                               context.read<AudioController>();
-                          audioController.playSfx(SfxType.drawGrid);
+                          audioController.playSfx(SfxType.swishSwish);
                         },
                         child: Board(
                           key: const Key('main board'),
@@ -204,6 +208,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
 
     _startOfPlay = DateTime.now();
 
+    // Preload ad for the win screen.
     final adsRemoved =
         context.read<InAppPurchaseController?>()?.adRemoval.active ?? false;
     if (!adsRemoved) {
@@ -228,8 +233,8 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     final playerProgress = context.read<PlayerProgress>();
     playerProgress.setLevelReached(widget.level.number);
 
-    // Let the player see the board just after winning for a bit.
-    await Future.delayed(_preCelebrationDuration);
+    // Let the player see the game just after winning for a bit.
+    await Future<void>.delayed(_preCelebrationDuration);
     if (!mounted) return;
 
     setState(() {

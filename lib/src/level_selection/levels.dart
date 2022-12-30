@@ -1,8 +1,11 @@
-import 'package:game1/src/ai/ai_opponent.dart';
-import 'package:game1/src/ai/humanlike_opponent.dart';
-import 'package:game1/src/ai/random_opponent.dart';
-import 'package:game1/src/ai/scoring_opponent.dart';
-import 'package:game1/src/game_internals/board_setting.dart';
+// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+import '../ai/ai_opponent.dart';
+import '../ai/humanlike_opponent.dart';
+import '../ai/random_opponent.dart';
+import '../ai/scoring_opponent.dart';
+import '../game_internals/board_setting.dart';
 
 final gameLevels = [
   GameLevel(
