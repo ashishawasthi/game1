@@ -1,41 +1,49 @@
-import 'dart:io';
+// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
 
+// Uncomment the following lines when enabling Firebase Crashlytics
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-import 'package:game1/src/ads/ads_controller.dart';
-import 'package:game1/src/app_lifecycle/app_lifecycle.dart';
-import 'package:game1/src/audio/audio_controller.dart';
-import 'package:game1/src/crashlytics/crashlytics.dart';
-import 'package:game1/src/games_services/games_services.dart';
-import 'package:game1/src/games_services/score.dart';
-import 'package:game1/src/in_app_purchase/in_app_purchase.dart';
-import 'package:game1/src/level_selection/level_selection_screen.dart';
-import 'package:game1/src/level_selection/levels.dart';
-import 'package:game1/src/main_menu/main_menu_screen.dart';
-import 'package:game1/src/play_session/play_session_screen.dart';
-import 'package:game1/src/player_progress/persistence/local_storage_player_progress_persistence.dart';
-import 'package:game1/src/player_progress/persistence/player_progress_persistence.dart';
-import 'package:game1/src/player_progress/player_progress.dart';
-import 'package:game1/src/settings/persistence/local_storage_settings_persistence.dart';
-import 'package:game1/src/settings/persistence/settings_persistence.dart';
-import 'package:game1/src/settings/settings.dart';
-import 'package:game1/src/settings/settings_screen.dart';
-import 'package:game1/src/style/ink_transition.dart';
-import 'package:game1/src/style/palette.dart';
-import 'package:game1/src/style/snack_bar.dart';
-import 'package:game1/src/win_game/win_game_screen.dart';
-
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'firebase_options.dart';
 
+import 'src/ads/ads_controller.dart';
+import 'src/app_lifecycle/app_lifecycle.dart';
+import 'src/audio/audio_controller.dart';
+import 'src/crashlytics/crashlytics.dart';
+import 'src/games_services/games_services.dart';
+import 'src/games_services/score.dart';
+import 'src/in_app_purchase/in_app_purchase.dart';
+import 'src/level_selection/level_selection_screen.dart';
+import 'src/level_selection/levels.dart';
+import 'src/main_menu/main_menu_screen.dart';
+import 'src/play_session/play_session_screen.dart';
+import 'src/player_progress/persistence/local_storage_player_progress_persistence.dart';
+import 'src/player_progress/persistence/player_progress_persistence.dart';
+import 'src/player_progress/player_progress.dart';
+import 'src/settings/persistence/local_storage_settings_persistence.dart';
+import 'src/settings/persistence/settings_persistence.dart';
+import 'src/settings/settings.dart';
+import 'src/settings/settings_screen.dart';
+import 'src/style/ink_transition.dart';
+import 'src/style/palette.dart';
+import 'src/style/snack_bar.dart';
+import 'src/win_game/win_game_screen.dart';
+
 Future<void> main() async {
+  // To enable Firebase Crashlytics, uncomment the following lines and
+  // the import statements at the top of this file.
+  // See the 'Crashlytics' section of the main README.md file for details.
+
   FirebaseCrashlytics? crashlytics;
   if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
     try {
