@@ -15,9 +15,9 @@
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
+# The .vscode folder contains launch configuration and tasks that
+# you configure in VS Code that you might want  include in version control,
+# so this line is commented out by default.
 #.vscode/
 
 # Flutter/Dart/Pub related
@@ -32,7 +32,7 @@
 /build/
 .fvm/
 
-# Web related
+# Web related (file doesn't exist, consider removing)
 lib/generated_plugin_registrant.dart
 
 # Symbolication related
@@ -41,10 +41,12 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
+# Android Studio places build artifacts here
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Other Generated Files, that changed after build on switching branches
 macos/Flutter/GeneratedPluginRegistrant.swift
 windows/flutter/generated_plugin_registrant.cc
 pubspec.lock
